@@ -1,0 +1,101 @@
+4. SQL함수
+ - sql함수의 특징과 장점
+ 1) 자원에 대한 연산을 수행할 수 있다.
+ 2) 개별적인 데이터 항목을 수행할 수 있다.
+
+4-1. 문자함수
+1) LOWER : 알파벳 값을 소문자로 변환
+2) UPPER : 알파벳 값을 대문자로 변환
+3) INITCAP : 알파벳 첫 글자만 대문자로 변환
+
+select UPPER(first_name)
+from employees;
+
+select UPPER('abc') from dual; dual= 가상테이블
+select LOWER('ABc') from dual;
+select INITCAP('abc') from dual;
+
+문) 사원테이블에서 'michael'로 검색하여 검색된 사원의
+사번, 이름을 출력하시오.
+
+select  employee_id, first_name
+from employees
+where LOWER(first_name) = LOWER('michael');
+---------------------------------------------------
+4-2. 조작함수
+1) LENGTH : 문자열의 길이
+select length('aabcdef') from dual;
+
+문)사원 테이블에서 이름의 길이가 6글자를 초과하는 사원의 
+사번,이름을 출력
+select  employee_id, first_name
+from employees
+where LENGTH(first_name) > 6;
+
+2) REPLACE : 특정 문장의 일부를 원하는 값으로 변경
+SELECT replace('good morning john', 'morning', 'evening')
+from dual;
+
+문) 사원테이블에서 부서번호가 50번인 사원들의 사번, 이름, 직종을 출력하되 
+이름에 'el'이 들어간 사람들은 모두 'el' 대신 '**'로 변경하여 출력
+select  employee_id, first_name, replace(first_name,'el','**') r_name, job_id 
+from employees
+where department_id = 50;
+
+3)CONCAT : 문장을 연결하는 함수
+예) 사원테이블에서 모든 사원의 이름과 성을 붙여서 full_name이라는
+컬럼으로 출력해보자
+select first_name || ' ' || last_name as full_name
+from employees;
+
+select CONCAT(first_name, last_name ) as full_name
+from employees;
+-----------------------------------------------
+4-3. 숫자 함수
+1) ROUND : 지정된 소수점 자리수에서 반올림
+select ROUND(456.789,2) from dual;
+2) TRUNC : 지정된 소수점 자리아래로 버림
+select TRUNC(456.789,2) from dual;
+
+--음수(-3, -1등..)는 소수점 앞자리 절삭
+select TRUNC(1456.789,-3) from dual;
+3) MOD : 나머지 값
+select MOD(7,4) from dual;
+
+문) 사번이 짝수인 사원들의 모든 정보를 출력
+select *
+from employees
+where MOD(employee_id, 2)  = 0;
+
+4-4. 날짜 함수( sysdate )
+SELECT sysdate FROM dual;  
+
+1)MONTHS_BETWEEN : 두 날짜 사이의 개월수
+SELECT sysdate, hire_date, TRUNC(MONTHS_BETWEEN(sysdate, hire_date),2) mon
+from employees
+
+2)ADD_MONTHS : 특정날짜에 개월수를 더한다
+예) 오늘부터 2개월 후가 몇월 몇일인가?
+SELECT sysdate, add_months(sysdate, 2 ) from dual;
+
+문) 사번이 120번인 사원이 입사후 3년 6개월 째 되는 날 퇴사를 하려고 한다
+퇴사날짜를 구하시오
+select hire_date, add_months(hire_date, 42) as resign
+from employees
+where employee_id = 120;
+------------------------------------
+5. 데이터 형변환
+ - 암시적 형변환('123'과 같이 숫자가 문자 형태로 되어있는 자원들은
+                     알아서 정수 자료형에 변한되어 저장된다)
+ - 명시적 형변환( SQL문장 안에서 함수를 사용하여 원하는 포멧 형식으로
+	          변경하는 것 )
+    SELECT TO_CHAR( hire_date, 'yyyy' ) from employees;
+    SELECT TO_CHAR( sysdate, 'yyyy/mm/dd' ) from dual;
+    SELECT TO_CHAR( sysdate, 'yyyy-mm-dd' ) from dual;
+    SELECT TO_CHAR( sysdate, 'yy-mm-dd day' ) from dual;
+    SELECT TO_CHAR( sysdate, 'yy-mm-dd -> hh24:mi:ss' ) from dual;
+
+    --hh12 : 12시간 기준
+    --hh12 : 24시간 기준
+    --mi : 분(0 ~ 59)
+    --ss : 초

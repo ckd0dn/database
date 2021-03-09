@@ -1,0 +1,47 @@
+7. join : 테이블과 테이블간의 연결성을 의미
+예) 각 부서가 위치한 도시명을 출력
+--locations 테이블의 location_id와 departments 테이블의 location_id가
+일치하는 지역을 검색하여 출력
+select d.department_id, d.dapartment_name, l.city,
+d.location_id, l.location_id
+from dapartments d, locations l
+where d.location_id = l.location_id;
+
+문) 사원테이블과 부서(departments)테이블로 부터
+이름, 부서번호(department_id), 부서이름(department_name)을 출력하되.
+사원테이블과 부서테이블의 부서번호가 같은 경우만 출력
+select e.first_name, d.department_id, d.department_name
+from d.departments, e.employees
+where d.department_id = e.department_id;
+
+문) 부서테이브과 지역(locations)로 부터 
+    department_name, city를 출력하되, 부서와 지역테이블의 location_id가 
+같은 경우에만 출력.
+
+select d.department_name, l.city
+from departments d, locations l
+where d.location_id = l.location_id;
+
+문)locations 테이블과 contries테이블을 통해
+도시명( city )과 해당도시가 위치하는 국가명( country_name)을 조회
+
+select l.city, c.country_name
+from locations l, countries c
+where l.country_id = c.country_id;		
+
+문)사번, 이름, 직종, 급여, 부서명, 도시명 순으로 출력
+    단, 직종이 IT_PROG인 사원들만 출력
+
+select e.employee_id, e.first_name, e.job_id, e.salary, d.department_name, l.city
+from employees e, departments d , locations l
+where e.job_id = 'IT_PROG' and e.department_id = d.department_id and d.location_id = l.location_id;
+
+문) 사원, 부서, 지역 테이블로 부터
+    first_name, last_name, email, department_id, department_name,
+    location_id, city정보를 출력하되, 
+    city가 'Seattle'인 경우의 결과를 보여주시오
+
+select e.first_name, e.last_name, e.email, d.department_id, d.department_name,
+l.location_id, l.city
+from employees e, departments d, location l
+where e.department_id = d.department_id and d.location_id = l.location_id and l.city = 'Seattle';
